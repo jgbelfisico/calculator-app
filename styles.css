@@ -1,0 +1,307 @@
+/*
+  ── Variables de color ────────────────────────────────────────────────────────
+  El tema oscuro se define en :root (valor por defecto).
+  El tema claro sobreescribe las mismas variables bajo [data-tema="claro"].
+  El JS solo alterna el atributo data-tema en el elemento <html>.
+*/
+
+/* Tema oscuro (por defecto) */
+:root {
+  --fondo-pagina:         #1a1a2e;
+  --fondo-calculadora:    #16213e;
+  --fondo-pantalla:       #0d2137;
+  --fondo-numero:         #1e2d45;
+  --fondo-numero-hover:   #263650;
+  --fondo-operador:       #163155;
+  --fondo-operador-hover: #1e4070;
+  --color-acento:         #e94560;
+  --color-acento-hover:   #c73652;
+  --texto-principal:      #ffffff;
+  --texto-secundario:     #8899aa;
+  --radio-borde:          10px;
+  --icono-tema:           "☀";   /* ícono que se muestra en modo oscuro (para pasar a claro) */
+}
+
+/* Tema claro: sobreescribe solo los colores */
+[data-tema="claro"] {
+  --fondo-pagina:         #e8ecf4;
+  --fondo-calculadora:    #ffffff;
+  --fondo-pantalla:       #dde3f0;
+  --fondo-numero:         #edf0f7;
+  --fondo-numero-hover:   #d8dded;
+  --fondo-operador:       #dde3f0;
+  --fondo-operador-hover: #c8d0e4;
+  --color-acento:         #e94560;
+  --color-acento-hover:   #c73652;
+  --texto-principal:      #1a1a2e;
+  --texto-secundario:     #5a6a80;
+  --icono-tema:           "☽";   /* ícono que se muestra en modo claro (para pasar a oscuro) */
+}
+
+/* ── Reset básico ─────────────────────────────────────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ── Transición suave al cambiar de tema ─────────────────────────────────── */
+/* Estas propiedades se animan cuando cambian las variables CSS */
+body,
+.calculadora,
+.historial,
+.pantalla,
+.btn {
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+/* ── Página ───────────────────────────────────────────────────────────────── */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--fondo-pagina);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  padding: 32px 16px; /* evita que el contenido toque los bordes en pantallas pequeñas */
+}
+
+/* Apila la calculadora y el historial en columna, centrados */
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 300px;
+}
+
+/* ── Contenedor de la calculadora ─────────────────────────────────────────── */
+.calculadora {
+  background-color: var(--fondo-calculadora);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Pantalla ─────────────────────────────────────────────────────────────── */
+.pantalla {
+  background-color: var(--fondo-pantalla);
+  border-radius: var(--radio-borde);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  min-height: 88px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+/* Línea pequeña de arriba: muestra la expresión en curso, ej: "8 +" */
+#expresion {
+  color: var(--texto-secundario);
+  font-size: 14px;
+  min-height: 18px;
+  text-align: right;
+}
+
+/* Número grande de abajo: el valor actual o resultado */
+#resultado {
+  color: var(--texto-principal);
+  font-size: 40px;
+  font-weight: 300;
+  text-align: right;
+  word-break: break-all; /* evita que números largos se salgan de la pantalla */
+  line-height: 1;
+}
+
+/* ── Cuadrícula de botones ────────────────────────────────────────────────── */
+.botones {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas de igual ancho */
+  gap: 10px;
+}
+
+/* ── Estilo base de todos los botones ─────────────────────────────────────── */
+.btn {
+  padding: 20px 0;
+  border: none;
+  border-radius: var(--radio-borde);
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  /*
+    Incluimos 'color' para que el texto de los botones también
+    se anime al cambiar de tema (no solo el fondo).
+    'transform' es para la animación de clic (:active).
+  */
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.08s ease;
+}
+
+/* Pequeña animación al hacer clic */
+.btn:active {
+  transform: scale(0.93);
+}
+
+/* ── Tipos de botones ─────────────────────────────────────────────────────── */
+
+.btn-numero {
+  background-color: var(--fondo-numero);
+  color: var(--texto-principal);
+}
+.btn-numero:hover {
+  background-color: var(--fondo-numero-hover);
+}
+
+.btn-operador {
+  background-color: var(--fondo-operador);
+  color: var(--color-acento);
+  font-size: 22px;
+}
+.btn-operador:hover {
+  background-color: var(--fondo-operador-hover);
+}
+
+.btn-limpiar {
+  background-color: var(--color-acento);
+  color: var(--texto-principal);
+  font-weight: 700;
+}
+.btn-limpiar:hover {
+  background-color: var(--color-acento-hover);
+}
+
+.btn-igual {
+  background-color: var(--color-acento);
+  color: var(--texto-principal);
+  font-size: 24px;
+}
+.btn-igual:hover {
+  background-color: var(--color-acento-hover);
+}
+
+/* ── Modificadores de tamaño ──────────────────────────────────────────────── */
+
+/* Botón alto: ocupa 2 filas del grid (usado en + y =) */
+.btn-alto {
+  grid-row: span 2;
+}
+
+/* Botón ancho: ocupa 2 columnas del grid (usado en 0) */
+.btn-ancho {
+  grid-column: span 2;
+}
+
+/* ── Historial ────────────────────────────────────────────────────────────── */
+
+.historial {
+  background-color: var(--fondo-calculadora);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Fila superior: título "Historial" + botón "Borrar" */
+.historial-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.historial-cabecera span {
+  color: var(--texto-secundario);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+#btn-borrar-historial {
+  background: none;
+  border: 1px solid var(--fondo-operador-hover);
+  border-radius: 6px;
+  color: var(--texto-secundario);
+  font-size: 12px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+#btn-borrar-historial:hover {
+  color: var(--color-acento);
+  border-color: var(--color-acento);
+}
+
+/* Lista de entradas */
+#lista-historial {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 200px;
+  overflow-y: auto;  /* scroll si hay muchas entradas */
+}
+
+/* Mensaje cuando no hay cálculos aún */
+.historial-vacio {
+  color: var(--texto-secundario);
+  font-size: 13px;
+  text-align: center;
+  padding: 12px 0;
+}
+
+/* Cada entrada del historial: "8 + 3 = 11" */
+.historial-entrada {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 7px 10px;
+  border-radius: 8px;
+  transition: background-color 0.1s;
+}
+
+.historial-entrada:hover {
+  background-color: var(--fondo-numero);
+}
+
+/* Expresión a la izquierda: "8 + 3 =" */
+.historial-expresion {
+  color: var(--texto-secundario);
+  font-size: 13px;
+}
+
+/* Resultado a la derecha: "11" */
+.historial-resultado {
+  color: var(--texto-principal);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* ── Botón de tema ────────────────────────────────────────────────────────── */
+
+#btn-tema {
+  align-self: flex-end;        /* se alinea a la derecha dentro del contenedor flex */
+  background: none;
+  border: 1px solid var(--fondo-operador-hover);
+  border-radius: 20px;
+  color: var(--texto-secundario);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 5px 14px;
+  transition: color 0.12s, border-color 0.12s, background-color 0.25s;
+}
+
+/* Muestra el ícono correcto según el tema activo usando la variable CSS */
+#btn-tema::before {
+  content: var(--icono-tema);
+  margin-right: 6px;
+}
+
+#btn-tema:hover {
+  color: var(--texto-principal);
+  border-color: var(--texto-secundario);
+}

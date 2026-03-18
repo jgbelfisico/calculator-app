@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Wrapper: apila el botón de tema, la calculadora y el historial en columna -->
+  <div class="contenedor">
+
+    <!-- Botón para cambiar entre tema oscuro y claro -->
+    <button id="btn-tema"></button>
+
+    <div class="calculadora">
+
+      <!-- Pantalla: muestra la expresión arriba y el número actual abajo -->
+      <div class="pantalla">
+        <span id="expresion"></span>
+        <span id="resultado">0</span>
+      </div>
+
+      <!--
+        Cuadrícula de botones (4 columnas).
+        Cada botón tiene:
+          data-accion → qué tipo de botón es (numero, operador, igual, limpiar)
+          data-valor  → el valor que representa (solo en números y operadores)
+
+        Layout resultante:
+          [ C ][ / ][ * ][ - ]
+          [ 7 ][ 8 ][ 9 ][ + ]  ← + ocupa 2 filas
+          [ 4 ][ 5 ][ 6 ][ + ]
+          [ 1 ][ 2 ][ 3 ][ = ]  ← = ocupa 2 filas
+          [   0   ][ . ][ = ]
+      -->
+      <div class="botones">
+        <button class="btn btn-limpiar"              data-accion="limpiar">C</button>
+        <button class="btn btn-operador"             data-accion="operador" data-valor="/">/</button>
+        <button class="btn btn-operador"             data-accion="operador" data-valor="*">×</button>
+        <button class="btn btn-operador"             data-accion="operador" data-valor="-">−</button>
+
+        <button class="btn btn-numero"               data-accion="numero" data-valor="7">7</button>
+        <button class="btn btn-numero"               data-accion="numero" data-valor="8">8</button>
+        <button class="btn btn-numero"               data-accion="numero" data-valor="9">9</button>
+        <!-- btn-alto: ocupa 2 filas gracias a grid-row: span 2 en el CSS -->
+        <button class="btn btn-operador btn-alto"    data-accion="operador" data-valor="+">+</button>
+
+        <button class="btn btn-numero"               data-accion="numero" data-valor="4">4</button>
+        <button class="btn btn-numero"               data-accion="numero" data-valor="5">5</button>
+        <button class="btn btn-numero"               data-accion="numero" data-valor="6">6</button>
+
+        <button class="btn btn-numero"               data-accion="numero" data-valor="1">1</button>
+        <button class="btn btn-numero"               data-accion="numero" data-valor="2">2</button>
+        <button class="btn btn-numero"               data-accion="numero" data-valor="3">3</button>
+        <!-- btn-alto: ocupa 2 filas -->
+        <button class="btn btn-igual btn-alto"       data-accion="igual">=</button>
+
+        <!-- btn-ancho: ocupa 2 columnas gracias a grid-column: span 2 en el CSS -->
+        <button class="btn btn-numero btn-ancho"     data-accion="numero" data-valor="0">0</button>
+        <button class="btn btn-numero"               data-accion="numero" data-valor=".">.</button>
+      </div>
+
+    </div><!-- fin .calculadora -->
+
+    <!-- Historial de operaciones -->
+    <div class="historial">
+      <div class="historial-cabecera">
+        <span>Historial</span>
+        <button id="btn-borrar-historial">Borrar</button>
+      </div>
+      <!-- Los cálculos se insertan aquí desde script.js -->
+      <ul id="lista-historial">
+        <li class="historial-vacio">Aún no hay cálculos</li>
+      </ul>
+    </div>
+
+  </div><!-- fin .contenedor -->
+  <script src="script.js"></script>
+</body>
+</html>
